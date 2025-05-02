@@ -40,21 +40,60 @@ def get_inverse(a, mod):
     inverse_element = extended_EA(a, mod)[1] % mod
     return inverse_element
 
+def create_table(p_list, alpha, n):
+    table = {}
+    for p_i in p_list:
+        j_index = []
+        r = []
+        for j in range(0, p_i):
+            r_j = (alpha ** ((n * j) // p_i)) % (n+1)
+            j_index.append(j)
+            r.append(r_j)
+        table[p_i] = (j_index, r)
+    return table
 
 
-# alpha = int(input('alpha = '))
-# beta = int(input('beta = '))
+def find_x(alpha, beta, p_list, l_list, n, table):
+    for i in range(len(p_list)):
+        coefs = []
+        j_list, r_list = table[p_list[i]]
+        for _ in range(l_list[i]):
+            if _ == 0:
+                res = (beta ** (n//p_list[i])) % (n+1)
+                ind = r_list.index(res)
+                coefs.append(j_list[ind])
+            else:
+                pass
+    return coefs
+
+
+
+
+
+
+
+
+
+alpha = int(input('alpha = '))
+beta = int(input('beta = '))
 module = int(input('module = '))
+n = module-1
 
-# brute_force_res = brute_force_DL(alpha, beta, module)
-# print()
-# print(f'x = {brute_force_res}')
-# print(f'{alpha}^{brute_force_res} = {beta} (mod {module})')
+# step 1: get canonical form of (module-1)
 
-module_can = get_canonical_form(module)
-print(f'{module} = {module_can}')
+can_form = get_canonical_form(n)
 
-module_can_short = get_short_canonical_form(module_can)
-print(f'Short form: {module} = {module_can_short}')
+p_list, l_list = get_short_canonical_form(can_form)
 
+print(l_list)
+# step 2: tables for p_i
 
+tabs = create_table(p_list, alpha, n)
+
+#print(tabs)
+
+# x
+
+x = find_x(alpha, beta, p_list, l_list, n, tabs)
+
+print(x)
