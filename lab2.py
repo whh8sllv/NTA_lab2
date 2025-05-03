@@ -9,7 +9,7 @@ def get_canonical_form(num):
         return res
     for i in range(2, num+1):
         if num % i == 0:
-            num = int(num/i)
+            num = num // i
             res.append(i)
             return get_canonical_form(num)
 
@@ -91,6 +91,17 @@ def get_equations_system(coefs_dict):
         mod.append(module)
     return y, mod
 
+def solve_system(y, mod):
+    product = 1
+    for i in mod:
+        product *= i
+    x = 0
+    for j in range(len(y)):
+        sup = product // mod[j]
+        add = y[j] * sup * get_inverse(sup, mod[j])
+        x += add
+    return (x % product)
+
 
     
     
@@ -107,18 +118,25 @@ n = module-1
 # step 1: get canonical form of (module-1)
 
 can_form = get_canonical_form(n)
+print(can_form)
 
 p_list, l_list = get_short_canonical_form(can_form)
+print(p_list)
+print(l_list)
 
 # step 2: tables for p_i
 
 tabs = create_table(p_list, alpha, n)
 
-#print(tabs)
+print(tabs)
 
 # x
 
 x = find_x_i(alpha, beta, p_list, l_list, n, tabs)
 
-print(get_equations_system(x))
+y, mod = get_equations_system(x)
+
+res = solve_system(y, mod)
+print('*')
+print(res)
 
