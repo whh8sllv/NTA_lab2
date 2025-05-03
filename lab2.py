@@ -70,8 +70,12 @@ def find_x_i(alpha, beta, p_list, l_list, n, table):
                     alpha_pow += ((p_list[i] ** m ) * k)
                 main_power = n // (p_list[i] ** (_ + 1))
                 res = ((beta * (inverse_elemet ** alpha_pow)) ** main_power) % (n+1)
-                ind = r_list.index(res)
-                coefs.append(j_list[ind])
+                if res in r_list:
+                    ind = r_list.index(res)
+                    coefs.append(j_list[ind])
+                else:
+                    coefs = [1, 1]
+
         xi_dict[p_list[i]] = coefs
     return xi_dict
 
@@ -118,25 +122,23 @@ n = module-1
 # step 1: get canonical form of (module-1)
 
 can_form = get_canonical_form(n)
-print(can_form)
 
 p_list, l_list = get_short_canonical_form(can_form)
-print(p_list)
-print(l_list)
 
 # step 2: tables for p_i
 
 tabs = create_table(p_list, alpha, n)
-
 print(tabs)
-
-# x
 
 x = find_x_i(alpha, beta, p_list, l_list, n, tabs)
 
 y, mod = get_equations_system(x)
 
 res = solve_system(y, mod)
-print('*')
 print(res)
+
+# res = brute_force_DL(alpha, beta, module)
+# print(res)
+
+
 
