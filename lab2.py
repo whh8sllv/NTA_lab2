@@ -53,7 +53,9 @@ def create_table(p_list, alpha, n):
     return table
 
 
-def find_x(alpha, beta, p_list, l_list, n, table):
+def find_x0(alpha, beta, p_list, l_list, n, table):
+    x_dict = {}
+    inverse_elemet = get_inverse(alpha, n+1)
     for i in range(len(p_list)):
         coefs = []
         j_list, r_list = table[p_list[i]]
@@ -63,15 +65,15 @@ def find_x(alpha, beta, p_list, l_list, n, table):
                 ind = r_list.index(res)
                 coefs.append(j_list[ind])
             else:
-                pass
-    return coefs
-
-
-
-
-
-
-
+                alpha_pow = 0
+                for m, k in enumerate(coefs):
+                    alpha_pow += ((p_list[i] ** m ) * k)
+                main_power = n // (p_list[i] ** (_ + 1))
+                res = ((beta * (inverse_elemet ** alpha_pow)) ** main_power) % (n+1)
+                ind = r_list.index(res)
+                coefs.append(j_list[ind])
+        x_dict[p_list[i]] = coefs
+    return x_dict
 
 
 alpha = int(input('alpha = '))
@@ -94,6 +96,8 @@ tabs = create_table(p_list, alpha, n)
 
 # x
 
-x = find_x(alpha, beta, p_list, l_list, n, tabs)
+x = find_x0(alpha, beta, p_list, l_list, n, tabs)
 
 print(x)
+
+
