@@ -53,8 +53,8 @@ def create_table(p_list, alpha, n):
     return table
 
 
-def find_x0(alpha, beta, p_list, l_list, n, table):
-    x_dict = {}
+def find_x_i(alpha, beta, p_list, l_list, n, table):
+    xi_dict = {}
     inverse_elemet = get_inverse(alpha, n+1)
     for i in range(len(p_list)):
         coefs = []
@@ -72,8 +72,31 @@ def find_x0(alpha, beta, p_list, l_list, n, table):
                 res = ((beta * (inverse_elemet ** alpha_pow)) ** main_power) % (n+1)
                 ind = r_list.index(res)
                 coefs.append(j_list[ind])
-        x_dict[p_list[i]] = coefs
-    return x_dict
+        xi_dict[p_list[i]] = coefs
+    return xi_dict
+
+
+def get_equations_system(coefs_dict):
+    y = []
+    mod = []
+    p_list = [i for i in coefs_dict.keys()]
+    coef_list = [i for i in coefs_dict.values()]
+    for i in range(len(coef_list)):
+        y_i = 0
+        for m, j in enumerate(coef_list[i]):
+            y_i += j * (p_list[i] ** m)
+        module = p_list[i] ** len(coef_list[i])
+        y_new = y_i % module
+        y.append(y_new)
+        mod.append(module)
+    return y, mod
+
+
+    
+    
+
+
+    
 
 
 alpha = int(input('alpha = '))
@@ -87,7 +110,6 @@ can_form = get_canonical_form(n)
 
 p_list, l_list = get_short_canonical_form(can_form)
 
-print(l_list)
 # step 2: tables for p_i
 
 tabs = create_table(p_list, alpha, n)
@@ -96,8 +118,7 @@ tabs = create_table(p_list, alpha, n)
 
 # x
 
-x = find_x0(alpha, beta, p_list, l_list, n, tabs)
+x = find_x_i(alpha, beta, p_list, l_list, n, tabs)
 
-print(x)
-
+print(get_equations_system(x))
 
