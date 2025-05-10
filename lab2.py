@@ -7,16 +7,6 @@ def brute_force_DL(a, b, m):
         if (a ** x) % m == b:
             return x
         
-res = []
-def get_canonical_form(num):
-    if num == 1:
-        return res
-    for i in range(2, num+1):
-        if num % i == 0:
-            num = num // i
-            res.append(i)
-            return get_canonical_form(num)
-
 def get_short_canonical_form(num):
     canonical_form = sympy.factorint(num)
     p_list = list(canonical_form.keys())
