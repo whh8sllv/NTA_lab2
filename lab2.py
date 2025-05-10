@@ -1,4 +1,6 @@
 import time
+import sympy
+
 
 def brute_force_DL(a, b, m):
     for x in range(2, m):
@@ -15,14 +17,11 @@ def get_canonical_form(num):
             res.append(i)
             return get_canonical_form(num)
 
-def get_short_canonical_form(arr):
-    p = []
-    l = []
-    for i in arr:
-        if i not in p:
-            p.append(i)
-            l.append(arr.count(i))
-    return p, l
+def get_short_canonical_form(num):
+    canonical_form = sympy.factorint(num)
+    p_list = list(canonical_form.keys())
+    l_list = list(canonical_form.values())
+    return p_list, l_list
 
 def extended_EA(a, b):
     u0, u1 = 1, 0
@@ -110,10 +109,8 @@ def solve_system(y, mod):
 
 
 def main_SPH(alpha, beta, n):
-    can_form = get_canonical_form(n)
-    p_list, l_list = get_short_canonical_form(can_form)
+    p_list, l_list = get_short_canonical_form(n)
     tabs = create_table(p_list, alpha, n)
-    print(tabs)
     x = find_x_i(alpha, beta, p_list, l_list, n, tabs)
     y, mod = get_equations_system(x)
     res = solve_system(y, mod)
@@ -180,3 +177,13 @@ test_data_2_5 = [[7031, 905, 27143], [31731, 76912, 95153], [25753, 43213, 56779
 
 # type 2, p = 6
 test_data_2_6 = [[176134, 245987, 271163], [153637, 67760, 161831], [663895, 823297, 880661], [81442, 74067, 348709], [170827, 236218, 708457]]
+
+# res = time_check_brute_force(test_data_1_3)
+# print(res)
+
+# start = time.time()
+# res = main_SPH(348, 621, 990)
+# print(res)
+# end = time.time()
+# final = end - start
+# print(final)
